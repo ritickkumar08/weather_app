@@ -1,1 +1,6 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap');
+
+@theme {
+  --color-mint-500: oklch(20.121% 0.02179 251.864);
+}

@@ -3,12 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>skySnap</title>
     <link href="./output.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="shortcut icon" href="/src/resources/logo.png" type="image/x-icon" sizes="512x512">
 </head>
-<body>
-    <h1 class="text-3xl font-bold underline">
-    Hello world!
-    </h1>
+<body class="p-0 m-0 text-slate-50 min-h-screen flex flex-col bg-mint-500 box-border">
+
+    <!-- ============================desinging the navbar===================================== -->
+    <header class="top-0 bg-transparent backdrop-blur-none">
+        <div class="max-w-6xl mx-auto py-4">
+            <div class="flex justify-between items-center rounded-full h-24 shadow-2xl shadow-slate-600 bg-black">
+                <div class="logo flex flex-wrap justify-center items-center ml-3.5">
+                    <a href=""><i class="fa-solid fa-cloud-bolt p-3 text-4xl"></i><h1 class="font-extrabold text-4xl inline"><b class="text-blue-400">sky</b>Snap</h1></a>   
+                </div>
+                <nav aria-label="primary" class="hidden md:block mr-5">
+                    <ul class="flex flex-wrap gap-6 text-md font-semibold justify-center md:justify-end">
+                        <li><input class="border w-md h-10 rounded-md focus:outline-2 focus:outline-slate-950" type="text" placeholder=" E.G.- GUMLA"></li>
+                        <li class="border p-2 rounded-4xl shadow-sm shadow-slate-500 hover:shadow-md hover:shadow-slate-400"><i class="fa-solid fa-location-dot mr-2"></i>Use Current Location</li>
+                        <!-- <li><button class="relative bg-gray-500 rounded-2xl w-12 h-6 hover:ring-2 hover:ring-green-400" aria-label="toggle button">
+                            <span class="absolute bg-amber-50 rounded-full shadow top-0.5 left-0.5 size-5"></span></button></li> -->
+                    </ul>
+                </nav>  
+            </div>
+        </div>
+    </header>
+
+    <!-- ======================================main===================================== -->
+    <main class="p-2.5 mt-5 border h-[80vh]">
+        <div class="border-2 max-w-6xl mx-auto h-[60vh] my-[5%] rounded-2xl shadow-xl shadow-slate-600 bg-[url('/src/resources/cloudy.jpg')] bg-center">
+            <div class="grid grid-cols-4 grid-rows-2 gap-4 max-w-4xl mx-auto my-[5%] h-[75%]">
+                <div class="border-0 col-span-4 rounded-2xl shadow-md shadow-black flex justify-between items-center">
+                    <div class="flex items-center gap-6 ml-14">
+                        <i class="fa-solid fa-cloud-rain text-6xl"></i>
+                        <h2 class="font-extrabold text-6xl">21.2 c <p class="font-light text-4xl">clear</p></h2>
+                    </div>
+                    <div class="mr-14">
+                        <button class="relative bg-gray-500 rounded-3xl w-20 h-10 hover:ring-2 hover:ring-green-400" aria-label="toggle button">
+                        <span class="absolute bg-amber-50 rounded-full shadow top-0.5 left-0.5 size-9"></span></button></li>
+                    </div>
+                </div>
+                <div class="border-2 rounded-xl shadow-md shadow-black">
+                    <div class="flex gap-2 justify-start ml-3 mt-1">
+                        <h3 class="text-xl">💨Wind</h3>
+                    </div>
+                    <div>
+                        <p class="ml-3 mt-2">wind Speed : </p>
+                        <p class="ml-3 mt-1">Direction :</p>
+                    </div>
+                </div>
+                <div class="border-2 rounded-xl shadow-md shadow-black">
+                    <div class="ml-3 mt-1">
+                        <h3 class="text-xl">☁️🌁Atmosphere</h3>
+                    </div>
+                </div>
+                <div class="border-2 rounded-xl shadow-md shadow-black">
+                    <div class="ml-3 mt-1">
+                        <h3 class="text-xl">🔥❄️Temperature</h3>
+                    </div>
+                </div>
+                <div class="border-2 rounded-xl shadow-md shadow-black">
+                    <div class="ml-3 mt-1">
+                        <h3 class="text-xl">🌁🔭Visibility</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+   <footer class="text-center border-b-0 mt-2 bg-black p-3">
+        <p>© 2025 weather app | Built with <i class="fa-solid fa-heart text-red-800"></i> by Ritick Kumar</p>
+        <p><b>skySnap</b> | snaps the weather conditions to present to you.</p>
+    </footer>
+
 </body>
 </html>

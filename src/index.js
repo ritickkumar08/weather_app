@@ -284,3 +284,12 @@ function handleGeoLocation(){
         { enableHighAccuracy: false, timeout: 8000 }
     )
 }
+
+//Input enter Key handling
+if(cityInput){
+    cityInput.addEventListener("keyup", (e) => {
+        if(e.key === "Enter") handleSearch()
+    })
+}
+
+//

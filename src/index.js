@@ -65,7 +65,7 @@ async function getWeatherByCity(city) {
 }
 
 //function to get the forcast data.
-async function getWeatherByGeoLocation(city) {
+async function getForecastByCity(city) {
     if (!city) throw new Error("Empty city");
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${cencodeURIComponent(city)}&appid=${API_KEY}&units=metric`
     return fetchJSON(url)
@@ -215,4 +215,21 @@ function displayForcast(forcastData) {
     
     forecastContainer.appendChild(card);
   });
+}
+
+//search handler--------------------------------------------------
+async function handleSearch() {
+    const city = (cityInput?.value || "").trim();
+    if(!city){
+        showError("please enter a city name before searching.")
+        return
+    }try {
+        const [current, forecast] = await Promise.all([getWeatherByCity(city), getForecastByCity(city)])
+        displayCurrentWeather(current)
+        displayForcast(forecast)
+        saveRecentSearch(current.name || city)
+    } catch (error) {
+        console.log(error);
+        showError(error?.message || "failed to fetch weather. check for your network")
+    }
 }

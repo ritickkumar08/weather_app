@@ -160,3 +160,59 @@ function displayCurrentWeather(data) {
         toggleBtn.textContent = "°C"
     }
 }
+
+//function to display the forcast for the coming 5 days.
+function displayForcast(forcastData) {
+    if (!forcastData || !forcastData.list) {
+        foreCastContainer.innerHTML = "<div class='col-span-5'>No forecast data</div>"
+        return
+    }
+    // Pick one forecast per day; choose items with "12:00:00" if present. Group by date.
+    const list = forecastData.list;
+    const byDate = {};
+    list.forEach((item) => {
+        const dtTxt = item.dt_txt; // "2025-10-28 12:00:00"
+        const date = dtTxt.split(" ")[0];
+        if (!byDate[date]) byDate[date] = [];
+        byDate[date].push(item);
+    });
+
+    // pick midday if exists, else pick the median item
+    const selected = [];
+    Object.keys(byDate).forEach((date) => {
+        const arr = byDate[date];
+        // find 12:00:00
+        let midday = arr.find((it) => it.dt_txt.includes("12:00:00"));
+        if (!midday) {
+            // pick the item with time closest to 12:00 (approx)
+            midday = arr[Math.floor(arr.length / 2)];
+        }
+        selected.push(midday);
+    });
+
+    // limit to next 5 days (excluding today; we include next days including today trimmed)
+    // We'll show up to 5 unique dates (including today if present)
+    const show = selected.slice(1, 6);
+
+    // Clear container
+    clearChildren(forecastContainer);
+
+    show.forEach((item) => {
+    const dateLabel = new Date(item.dt * 1000).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+    const temp = item.main?.temp ?? "N/A";
+    const wind = item.wind?.speed ?? "N/A";
+    const humidity = item.main?.humidity ?? "N/A";
+    const icon = item.weather?.[0]?.icon ?? "";
+    // create card
+    const card = document.createElement("div");
+    card.className = "flex flex-col items-center justify-center p-3 rounded-lg bg-slate-800/60";
+    card.innerHTML = `
+      <div class="font-semibold">${dateLabel}</div>
+      <img src="http://openweathermap.org/img/wn/${icon}@2x.png" alt="icon" />
+      <div class="mt-1">${temp.toFixed ? temp.toFixed(1) + " °C" : temp}</div>
+      <div class="text-sm mt-1">💨 ${wind} m/s</div>
+      <div class="text-sm">💧 ${humidity}%</div>`
+    
+    forecastContainer.appendChild(card);
+  });
+}

@@ -17,11 +17,23 @@ const tempIconEl = tempratureMain?.querySelector('i') || null
 const tempTextEl = tempratureMain?.querySelector('h2') || null
 const toggleBtn = tempratureMain?.querySelector('button[aria-label]') || null
 
-// little info boxes -----------------------------------------------------------------------------------
+//info boxes -----------------------------------------------------------------------------------
 const windBox = document.querySelector(".wind")
 const atmosphereBox = document.querySelector(".atmosphere")
 const temperatureBox = document.querySelector(".temperature")
 const visibilityBox = document.querySelector(".visibility")
+
+//to render forecast cards: creates container under detailsArea
+let forecastContainer = document.querySelector(".forecastContainer");
+if (!forecastContainer) {
+  forecastContainer = document.createElement("div");
+  forecastContainer.className = "forecastContainer max-w-6xl mx-auto grid grid-cols-5 gap-4 mt-4 px-4";
+  // Insert after the grid inside detailsArea if possible, otherwise append
+  const grid = detailsArea.querySelector(".grid");
+  if (grid) grid.parentNode.appendChild(forecastContainer);
+  else detailsArea.appendChild(forecastContainer);
+}
+
 
 //some dynamic creations variables -----------------------------------------------------------------------------------
 let recentDropDown
@@ -31,6 +43,8 @@ let extremeAlert
 //state variables -----------------------------------------------------------------------------------
 let currentTempC = null
 let isCelsius = true //will be furthur be updated by the users toggles
+const RECENT_KEY = "skySnap_recentCities";
+const MAX_RECENTS = 6;
 
 //utility helpers -----------------------------------------------------------------------------------
 function toFahrenhiet(Celsius) {
@@ -38,7 +52,37 @@ function toFahrenhiet(Celsius) {
     return ((Celsius * 9) / 5) + 32
 }
 
+function formatDateFromUnix(ts) {
+  const d = new Date(ts * 1000)
+  return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })
+}
 
+function clearChildren(el) {
+  while (el.firstChild) el.removeChild(el.firstChild)
+}
+
+
+// ---------- Error UI ----------
+function ensureErrorPopup() {
+  if (errorPopup) return
+  errorPopup = document.createElement("div")
+  errorPopup.id = "skysnap_error"
+  errorPopup.className = "fixed left-1/2 -translate-x-1/2 top-8 z-50 p-4 rounded-lg shadow-lg text-black hidden"
+  errorPopup.style.background = "linear-gradient(90deg,#ffefb5,#ffb5b5)"
+  errorPopup.style.minWidth = "260px"
+  errorPopup.style.boxShadow = "0 6px 20px rgba(0,0,0,0.4)"
+  document.body.appendChild(errorPopup)
+}
+
+function showError(message, timeout = 5000) {
+  ensureErrorPopup()
+  errorPopup.innerHTML = `<strong class="block mb-1">Error</strong><div>${message}</div>`
+  errorPopup.classList.remove("hidden")
+  if (errorPopup.hideTimeout) clearTimeout(errorPopup.hideTimeout)
+  errorPopup.hideTimeout = setTimeout(() => {
+    errorPopup.classList.add("hidden")
+  }, timeout);
+}
 
 
 // fecth function -----------------------------------------------------------------------------------
@@ -292,4 +336,11 @@ if(cityInput){
     })
 }
 
-//
+//load recent page load
+window.addEventListener("load", () => {
+    try {
+       loadRecentSearches(); 
+    } catch (error) {
+        console.warn("failed to load recent searches",err);   
+    }
+})

@@ -198,32 +198,32 @@ function displayForcast(forcastData) {
     clearChildren(forecastContainer);
 
     show.forEach((item) => {
-    const dateLabel = new Date(item.dt * 1000).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
-    const temp = item.main?.temp ?? "N/A";
-    const wind = item.wind?.speed ?? "N/A";
-    const humidity = item.main?.humidity ?? "N/A";
-    const icon = item.weather?.[0]?.icon ?? "";
-    // create card
-    const card = document.createElement("div");
-    card.className = "flex flex-col items-center justify-center p-3 rounded-lg bg-slate-800/60";
-    card.innerHTML = `
+        const dateLabel = new Date(item.dt * 1000).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
+        const temp = item.main?.temp ?? "N/A";
+        const wind = item.wind?.speed ?? "N/A";
+        const humidity = item.main?.humidity ?? "N/A";
+        const icon = item.weather?.[0]?.icon ?? "";
+        // create card
+        const card = document.createElement("div");
+        card.className = "flex flex-col items-center justify-center p-3 rounded-lg bg-slate-800/60";
+        card.innerHTML = `
       <div class="font-semibold">${dateLabel}</div>
       <img src="http://openweathermap.org/img/wn/${icon}@2x.png" alt="icon" />
       <div class="mt-1">${temp.toFixed ? temp.toFixed(1) + " °C" : temp}</div>
       <div class="text-sm mt-1">💨 ${wind} m/s</div>
       <div class="text-sm">💧 ${humidity}%</div>`
-    
-    forecastContainer.appendChild(card);
-  });
+
+        forecastContainer.appendChild(card);
+    });
 }
 
 //search handler--------------------------------------------------
 async function handleSearch() {
     const city = (cityInput?.value || "").trim();
-    if(!city){
+    if (!city) {
         showError("please enter a city name before searching.")
         return
-    }try {
+    } try {
         const [current, forecast] = await Promise.all([getWeatherByCity(city), getForecastByCity(city)])
         displayCurrentWeather(current)
         displayForcast(forecast)
@@ -232,4 +232,55 @@ async function handleSearch() {
         console.log(error);
         showError(error?.message || "failed to fetch weather. check for your network")
     }
+}
+
+//toggle button for the unit chnage -----------------------------------------------------------
+function setUpToggle() {
+    if (!toggleBtn) return
+    toggleBtn.addEventListener("click", () => {
+        if (currentTempC == null) return;
+        isCelsius = !isCelsius
+        if (isCelsius) {
+            //show C
+            if (tempTextEl) {
+                tempTextEl.innerHTML = `${currentTempC.toFixed(1)} °C ${tempTextEl.querySelector ? tempTextEl.querySelector("p")?.outerHTML ?? "" : ""}`;
+            }
+            toggleBtn.textContent = "°C"
+        } else {
+            //show F
+            const f = cToF(currentTempC);
+            if (tempTextEl) {
+                tempTextEl.innerHTML = `${f.toFixed(1)} °F ${tempTextEl.querySelector ? tempTextEl.querySelector("p")?.outerHTML ?? "" : ""}`;
+            }
+            toggleBtn.textContent = "°F";
+        }
+    })
+}
+
+
+//geolocation flow------------------------------------------------------------------------
+function handleGeoLocation(){
+    if(!navigator.geolocation){
+        showError("geolocation is not supported by your browser")
+        return
+    }
+    navigator.geolocation.getCurrentPosition(
+        async (position) =>{
+            const {latitude, longitude} = position.coords;
+            try {
+                const [current, forecast] = await Promise.all([getWeatherByCoords(latitude, longitude), getForecastByCoords(latitude, longitude)])
+                displayCurrentWeather(current)
+                displayForcast(forecast)
+                saveRecentSearch(current.name || `${latitude.toFixed(2)},${longitude.toFixed(2)}`)
+            } catch (error) {
+                console.error(err)
+                showError("unable to fetch weather for current location" + (err.message || ""))
+            }
+        },
+        (err) => {
+            console.error(err);
+            showError("Permission denied or unable to get your location")
+        },
+        { enableHighAccuracy: false, timeout: 8000 }
+    )
 }

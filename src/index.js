@@ -7,11 +7,11 @@
 const API_KEY = "7ba69110ea3e8a7bf4ad655cdd25a2de";
 
 //selecting all the need nodes that would be manipulated later -----------------------------------------------------------------------------------
-const cityInput = document.querySelector('inputCity') //points at the input node
-const userLocation = document.querySelector('userLocation') //points at the button for 
-const navBar = document.querySelector('navBar')//pointin at the navigation bar as a whole
-const detailsArea = document.querySelector('detailsArea') //points at the whole area where the information about the weather conditions is displayed
-const tempratureMain = document.querySelector('tempratureMain') //the area where the information is displayed
+const cityInput = document.querySelector('.inputCity') //points at the input node
+const userLocation = document.querySelector('.userLocation') //points at the button for 
+const navBar = document.querySelector('.navBar')//pointin at the navigation bar as a whole
+const detailsArea = document.querySelector('.detailsArea') //points at the whole area where the information about the weather conditions is displayed
+const tempratureMain = document.querySelector('.tempratureMain') //the area where the information is displayed
 const tempIconEl = tempratureMain?.querySelector('i') || null
 const tempTextEl = tempratureMain?.querySelector('h2') || null
 const toggleBtn = tempratureMain?.querySelector('button[aria-label]') || null

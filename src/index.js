@@ -10,7 +10,6 @@ const API_KEY = "7ba69110ea3e8a7bf4ad655cdd25a2de";
 const cityInput = document.querySelector('inputCity') //points at the input node
 const userLocation = document.querySelector('userLocation') //points at the button for 
 const navBar = document.querySelector('navBar')//pointin at the navigation bar as a whole
-const logo = document.querySelector('logo') //pointing at the logo of the webapp
 const detailsArea = document.querySelector('detailsArea') //points at the whole area where the information about the weather conditions is displayed
 const tempratureMain = document.querySelector('tempratureMain') //the area where the information is displayed
 const tempIconEl = tempratureMain?.querySelector('i') || null
@@ -26,17 +25,17 @@ const visibilityBox = document.querySelector(".visibility")
 //to render forecast cards: creates container under detailsArea
 let forecastContainer = document.querySelector(".forecastContainer");
 if (!forecastContainer) {
-  forecastContainer = document.createElement("div");
-  forecastContainer.className = "forecastContainer max-w-6xl mx-auto grid grid-cols-5 gap-4 mt-4 px-4";
-  // Insert after the grid inside detailsArea if possible, otherwise append
-  const grid = detailsArea.querySelector(".grid");
-  if (grid) grid.parentNode.appendChild(forecastContainer);
-  else detailsArea.appendChild(forecastContainer);
+    forecastContainer = document.createElement("div");
+    forecastContainer.className = "forecastContainer max-w-6xl mx-auto grid grid-cols-5 gap-4 mt-4 px-4";
+    // Insert after the grid inside detailsArea if possible, otherwise append
+    const grid = detailsArea.querySelector(".grid");
+    if (grid) grid.parentNode.appendChild(forecastContainer);
+    else detailsArea.appendChild(forecastContainer);
 }
 
 
 //some dynamic creations variables -----------------------------------------------------------------------------------
-let recentDropDown
+let recentDropdown
 let errorPopup
 let extremeAlert
 
@@ -53,36 +52,142 @@ function toFahrenhiet(Celsius) {
 }
 
 function formatDateFromUnix(ts) {
-  const d = new Date(ts * 1000)
-  return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })
+    const d = new Date(ts * 1000)
+    return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })
 }
 
 function clearChildren(el) {
-  while (el.firstChild) el.removeChild(el.firstChild)
+    while (el.firstChild) el.removeChild(el.firstChild)
 }
 
 
 // ---------- Error UI ----------
 function ensureErrorPopup() {
-  if (errorPopup) return
-  errorPopup = document.createElement("div")
-  errorPopup.id = "skysnap_error"
-  errorPopup.className = "fixed left-1/2 -translate-x-1/2 top-8 z-50 p-4 rounded-lg shadow-lg text-black hidden"
-  errorPopup.style.background = "linear-gradient(90deg,#ffefb5,#ffb5b5)"
-  errorPopup.style.minWidth = "260px"
-  errorPopup.style.boxShadow = "0 6px 20px rgba(0,0,0,0.4)"
-  document.body.appendChild(errorPopup)
+    if (errorPopup) return
+    errorPopup = document.createElement("div")
+    errorPopup.id = "skysnap_error"
+    errorPopup.className = "fixed left-1/2 -translate-x-1/2 top-8 z-50 p-4 rounded-lg shadow-lg text-black hidden"
+    errorPopup.style.background = "linear-gradient(90deg,#ffefb5,#ffb5b5)"
+    errorPopup.style.minWidth = "260px"
+    errorPopup.style.boxShadow = "0 6px 20px rgba(0,0,0,0.4)"
+    document.body.appendChild(errorPopup)
 }
 
 function showError(message, timeout = 5000) {
-  ensureErrorPopup()
-  errorPopup.innerHTML = `<strong class="block mb-1">Error</strong><div>${message}</div>`
-  errorPopup.classList.remove("hidden")
-  if (errorPopup.hideTimeout) clearTimeout(errorPopup.hideTimeout)
-  errorPopup.hideTimeout = setTimeout(() => {
-    errorPopup.classList.add("hidden")
-  }, timeout);
+    ensureErrorPopup()
+    errorPopup.innerHTML = `<strong class="block mb-1">Error</strong><div>${message}</div>`
+    errorPopup.classList.remove("hidden")
+    if (errorPopup.hideTimeout) clearTimeout(errorPopup.hideTimeout)
+    errorPopup.hideTimeout = setTimeout(() => {
+        errorPopup.classList.add("hidden")
+    }, timeout);
 }
+
+// ---------- Recent searches dropdown ----------
+function ensureRecentDropdown() {
+    if (recentDropdown) return recentDropdown;
+
+    // Create wrapper
+    recentDropdown = document.createElement("div")
+    recentDropdown.className = "recentDropdown relative inline-block ml-3"
+    recentDropdown.innerHTML = `
+    <button class="recentToggle bg-slate-800 px-4 py-2 rounded-md">Recent ▼</button>
+    <div class="recentList absolute right-0 mt-2 w-44 bg-slate-900 text-slate-50 rounded-md p-2 shadow-lg hidden"></div>`
+
+    // append to nav if exists, otherwise to header
+    const navUl = nav?.querySelector("ul")
+    if (navUl) {
+        const li = document.createElement("li")
+        li.appendChild(recentDropdown)
+        navUl.appendChild(li)
+    } else {
+        document.querySelector(".navBar")?.appendChild(recentDropdown)
+    }
+
+    // toggle behavior
+    const toggle = recentDropdown.querySelector(".recentToggle")
+    const list = recentDropdown.querySelector(".recentList")
+    toggle.addEventListener("click", (e) => {
+        e.stopPropagation()
+        list.classList.toggle("hidden")
+        populateRecentList()
+    });
+
+    // click outside closes it
+    document.addEventListener("click", (e) => {
+        if (!recentDropdown.contains(e.target)) {
+            list.classList.add("hidden")
+        }
+    });
+
+    return recentDropdown
+}
+
+function saveRecentSearch(city) {
+    if (!city) return
+    const raw = localStorage.getItem(RECENT_KEY)
+    let arr = raw ? JSON.parse(raw) : []
+    // normalize city (case-insensitive)
+    const normalized = city.trim()
+    arr = arr.filter((c) => c.toLowerCase() !== normalized.toLowerCase())
+    arr.unshift(normalized)
+    if (arr.length > MAX_RECENTS) arr = arr.slice(0, MAX_RECENTS)
+    localStorage.setItem(RECENT_KEY, JSON.stringify(arr))
+    populateRecentList()
+}
+
+function loadRecentSearches() {
+    ensureRecentDropdown()
+    populateRecentList()
+}
+
+function populateRecentList() {
+    ensureRecentDropdown()
+    const list = recentDropdown.querySelector(".recentList")
+    clearChildren(list)
+    const raw = localStorage.getItem(RECENT_KEY)
+    const arr = raw ? JSON.parse(raw) : []
+    if (!arr || arr.length === 0) {
+        list.innerHTML = `<div class="text-sm text-slate-400 p-2">No recent searches</div>`
+        return;
+    }
+    arr.forEach((city) => {
+        const btn = document.createElement("button")
+        btn.className = "block w-full text-left px-2 py-1 rounded hover:bg-slate-800"
+        btn.textContent = city
+        btn.addEventListener("click", () => {
+            list.classList.add("hidden")
+            inputCity.value = city
+            handleSearch()
+        })
+        list.appendChild(btn)
+    })
+
+    // Clear recent button
+    const clr = document.createElement("button")
+    clr.className = "mt-2 block px-2 py-1 text-sm text-amber-200 hover:underline"
+    clr.textContent = "Clear recent"
+    clr.addEventListener("click", () => {
+        localStorage.removeItem(RECENT_KEY)
+        populateRecentList()
+    })
+    list.appendChild(clr)
+}
+
+// ---------- Background switching ----------
+function setBackground(condition) {
+    const c = (condition || "").toLowerCase()
+    let imagePath = "/src/resources/default.jpg"
+    if (c.includes("rain") || c.includes("drizzle")) imagePath = "/src/resources/rainy.jpg"
+    else if (c.includes("cloud")) imagePath = "/src/resources/cloudy.jpg"
+    else if (c.includes("clear")) imagePath = "/src/resources/clear.jpg"
+    else if (c.includes("snow")) imagePath = "/src/resources/snow.jpg"
+    // fallback: use a gradient if image not found; we set backgroundImage
+    detailsArea.style.backgroundImage = `url('${imagePath}')`
+    detailsArea.style.backgroundSize = "cover"
+    detailsArea.style.backgroundPosition = "center"
+}
+
 
 
 // fecth function -----------------------------------------------------------------------------------
@@ -279,7 +384,7 @@ async function handleSearch() {
 }
 
 //toggle button for the unit chnage -----------------------------------------------------------
-function setUpToggle() {
+function setupToggle() {
     if (!toggleBtn) return
     toggleBtn.addEventListener("click", () => {
         if (currentTempC == null) return;
@@ -303,14 +408,14 @@ function setUpToggle() {
 
 
 //geolocation flow------------------------------------------------------------------------
-function handleGeoLocation(){
-    if(!navigator.geolocation){
+function handleGeoLocation() {
+    if (!navigator.geolocation) {
         showError("geolocation is not supported by your browser")
         return
     }
     navigator.geolocation.getCurrentPosition(
-        async (position) =>{
-            const {latitude, longitude} = position.coords;
+        async (position) => {
+            const { latitude, longitude } = position.coords;
             try {
                 const [current, forecast] = await Promise.all([getWeatherByCoords(latitude, longitude), getForecastByCoords(latitude, longitude)])
                 displayCurrentWeather(current)
@@ -330,17 +435,23 @@ function handleGeoLocation(){
 }
 
 //Input enter Key handling
-if(cityInput){
+if (cityInput) {
     cityInput.addEventListener("keyup", (e) => {
-        if(e.key === "Enter") handleSearch()
+        if (e.key === "Enter") handleSearch()
     })
 }
+
+// click handlers
+if (useLocationBtn) useLocationBtn.addEventListener("click", handleGeolocation);
+
+// wire up toggle
+setupToggle();
 
 //load recent page load
 window.addEventListener("load", () => {
     try {
-       loadRecentSearches(); 
+        loadRecentSearches();
     } catch (error) {
-        console.warn("failed to load recent searches",err);   
+        console.warn("failed to load recent searches", err);
     }
 })

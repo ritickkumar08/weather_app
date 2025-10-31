@@ -8,13 +8,15 @@ const API_KEY = "7ba69110ea3e8a7bf4ad655cdd25a2de";
 
 //selecting all the need nodes that would be manipulated later -----------------------------------------------------------------------------------
 const cityInput = document.querySelector('.inputCity') //points at the input node
-const userLocation = document.querySelector('.userLocation') //points at the button for 
-const navBar = document.querySelector('.navBar')//pointin at the navigation bar as a whole
+const useLocationBtn = document.querySelector('.userLocation') //points at the button for 
+const nav = document.querySelector('nav')//pointin at the navigation bar as a whole
 const detailsArea = document.querySelector('.detailsArea') //points at the whole area where the information about the weather conditions is displayed
 const tempratureMain = document.querySelector('.tempratureMain') //the area where the information is displayed
 const tempIconEl = tempratureMain?.querySelector('i') || null
 const tempTextEl = tempratureMain?.querySelector('h2') || null
 const toggleBtn = tempratureMain?.querySelector('button[aria-label]') || null
+
+// console.log({ tempratureMain, cityInput, navBar, detailsArea });
 
 //info boxes -----------------------------------------------------------------------------------
 const windBox = document.querySelector(".wind")
@@ -23,14 +25,14 @@ const temperatureBox = document.querySelector(".temperature")
 const visibilityBox = document.querySelector(".visibility")
 
 //to render forecast cards: creates container under detailsArea
-let forecastContainer = document.querySelector(".forecastContainer");
+let forecastContainer = document.querySelector(".forecastContainer")
 if (!forecastContainer) {
-    forecastContainer = document.createElement("div");
-    forecastContainer.className = "forecastContainer max-w-6xl mx-auto grid grid-cols-5 gap-4 mt-4 px-4";
+    forecastContainer = document.createElement("div")
+    forecastContainer.className = "forecastContainer max-w-6xl mx-auto grid grid-row-5 sm:grid-cols-5 gap-4 mt-4 px-4"
     // Insert after the grid inside detailsArea if possible, otherwise append
-    const grid = detailsArea.querySelector(".grid");
-    if (grid) grid.parentNode.appendChild(forecastContainer);
-    else detailsArea.appendChild(forecastContainer);
+    const grid = detailsArea.querySelector(".grid")
+    if (grid) grid.parentNode.appendChild(forecastContainer)
+    else detailsArea.appendChild(forecastContainer)
 }
 
 
@@ -46,7 +48,7 @@ const RECENT_KEY = "skySnap_recentCities";
 const MAX_RECENTS = 6;
 
 //utility helpers -----------------------------------------------------------------------------------
-function toFahrenhiet(Celsius) {
+function cToF(Celsius) {
     //formula to convert the data to fahrenhiet.
     return ((Celsius * 9) / 5) + 32
 }
@@ -82,6 +84,27 @@ function showError(message, timeout = 5000) {
         errorPopup.classList.add("hidden")
     }, timeout);
 }
+// ---------- Extreme temp alert ----------
+function ensureExtremeAlert() {
+    if (extremeAlert) return
+    extremeAlert = document.createElement("div")
+    extremeAlert.id = "skysnap_extreme"
+    extremeAlert.className = "fixed right-4 bottom-4 z-40 p-3 rounded-lg shadow-lg text-white hidden"
+    extremeAlert.style.background = "linear-gradient(90deg,#ff4d4d,#ff9900)"
+    extremeAlert.style.boxShadow = "0 8px 30px rgba(0,0,0,0.4)"
+    document.body.appendChild(extremeAlert)
+}
+
+function showExtremeAlert(message, timeout = 6000) {
+    ensureExtremeAlert()
+    extremeAlert.innerHTML = `<strong>Alert</strong><div>${message}</div>`
+    extremeAlert.classList.remove("hidden")
+    if (extremeAlert.hideTimeout) clearTimeout(extremeAlert.hideTimeout)
+    extremeAlert.hideTimeout = setTimeout(() => {
+        extremeAlert.classList.add("hidden")
+    }, timeout)
+}
+
 
 // ---------- Recent searches dropdown ----------
 function ensureRecentDropdown() {
@@ -208,7 +231,7 @@ async function fetchJSON(url) {
 //function to fetch weather by city
 async function getWeatherByCity(city) {
     if (!city) throw new Error('enter a city name')
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${cencodeURIComponent(city)}&appid=${API_KEY}&units=metric` // we are not using await 
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric` // we are not using await 
     //because we are returning a function call, and the function fetches the url checks for error and then return it to furthur functions.
     return fetchJSON(url)
 }
@@ -216,7 +239,7 @@ async function getWeatherByCity(city) {
 //function to get the forcast data.
 async function getForecastByCity(city) {
     if (!city) throw new Error("Empty city");
-    const url = `https://api.openweathermap.org/data/2.5/weather?q=${cencodeURIComponent(city)}&appid=${API_KEY}&units=metric`
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric`
     return fetchJSON(url)
 }
 
@@ -258,7 +281,7 @@ function displayCurrentWeather(data) {
     //wind box
     if (windBox) {
         const speed = data.wind?.speed ?? "N/A"
-        const pressure = data.wind?.deg ?? "N/A";
+        const deg = data.wind?.deg ?? "N/A";
         windBox.innerHTML = `
         <div class="ml-3 mt-1"><h3 class="text-xl">💨Wind</h3>
         <div>
@@ -311,9 +334,9 @@ function displayCurrentWeather(data) {
 }
 
 //function to display the forcast for the coming 5 days.
-function displayForcast(forcastData) {
-    if (!forcastData || !forcastData.list) {
-        foreCastContainer.innerHTML = "<div class='col-span-5'>No forecast data</div>"
+function displayForcast(forecastData) {
+    if (!forecastData || !forecastData.list) {
+        forecastContainer.innerHTML = "<div class='col-span-5'>No forecast data</div>"
         return
     }
     // Pick one forecast per day; choose items with "12:00:00" if present. Group by date.
@@ -442,7 +465,7 @@ if (cityInput) {
 }
 
 // click handlers
-if (useLocationBtn) useLocationBtn.addEventListener("click", handleGeolocation);
+if (useLocationBtn) useLocationBtn.addEventListener("click", handleGeoLocation);
 
 // wire up toggle
 setupToggle();
@@ -452,6 +475,6 @@ window.addEventListener("load", () => {
     try {
         loadRecentSearches();
     } catch (error) {
-        console.warn("failed to load recent searches", err);
+        console.warn("failed to load recent searches", error);
     }
 })

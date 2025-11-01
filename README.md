@@ -1,56 +1,63 @@
-# weather_app
-// https://api.openweathermap.org/data/2.5/weather?q=gumla&appid=7ba69110ea3e8a7bf4ad655cdd25a2de&units=metric
+skySnap ☁️
+A weather forecasting web app built using JavaScript, Tailwind CSS, and the OpenWeatherMap API.
+
+Overview:
+skySnap is a simple yet smart weather forecast web app that brings live weather updates right to your screen.
+It automatically detects your location (with permission) or allows you to search by city name.
+From temperature and humidity to wind speed and pressure — everything’s displayed cleanly, with dynamic visuals that adapt to the current weather.
+
+goal:- The goal was to create a smooth, interactive, and informative experience using clean UI and logical code flow.
+
+Features :-
+-> Location-based weather detection
+   -> On first visit, the app asks for location permission.
+   -> If granted, it fetches live data for your current city (temperature, wind, atmosphere, and visibility).
+
+-> Manual city search
+   -> If location access is denied, you can still search any city manually.
+   -> The UI updates instantly with fresh weather data.
+   -> A dropdown keeps track of recently searched cities for quick access.
+
+-> Smart weather classification
+   -> Weather conditions are grouped into categories like Sunny, Cloudy, Rainy, Stormy, Foggy, etc.
+   -> Each category comes with icons and matching background visuals for better experience.
+
+-> Temperature toggle
+   -> Switch between °C and °F easily.
+   -> The toggle affects only today’s main temperature.
+
+-> Dynamic weather visuals
+   -> Backgrounds automatically change according to the current condition (rainy, cloudy, clear, etc.).
+   -> Smooth and subtle transitions for a polished look.
+
+-> Extended 5-day forecast
+   -> Displays upcoming weather predictions with date, temperature, wind, and humidity in neatly styled cards.
+
+-> Custom alerts
+   -> Displays a special alert when extreme temperatures occur (like above 40°C).
 
 
-//writing the flow of the webapp
-1. the user visits.
--> a dialogue box appears asking for the location access.
--> if the user allows the location access fetch the weather data such as temperature, wind information, temperature, atmosphere  and
-   visiblity and display them at the dedicated slot.
--> initial display is in degree celsius but the user has a toggle button to switch it to fahrenheit
+Tech Stack :
+   -> Frontend: HTML, Tailwind CSS
+   -> Logic: Vanilla JavaScript
+   -> API: OpenWeatherMap API
+   -> Version Control: Git & GitHub
 
-2. when the user declines the location permission. we continue with normal flow.
--> like displaying the home screen with the weather information of a default se location.
--> in the home page we have an option for user to enter the city name and get the weather information displayed.
--> and also to choose if now they want weather information according to the location access.
- 
-3. if the user chooses to enter the city namme 
--> we update the information accordingly we also give verdicts depending on the cases such as 
-   function classifyWeather(conditionMain) {
-   switch (conditionMain.toLowerCase()) {
-        case 'clear':
-        return 'Sunny';
-        case 'clouds':
-        return 'Cloudy';
-        case 'rain':
-        case 'drizzle':
-        return 'Rainy';
-        case 'thunderstorm':
-        return 'Stormy';
-        case 'snow':
-        return 'Snowy';
-        case 'mist':
-        case 'haze':
-        case 'fog':
-        case 'smoke':
-        return 'Foggy';
-        case 'dust':
-        case 'sand':
-        case 'ash':
-        return 'Dusty';
-        case 'tornado':
-        case 'squall':
-        return 'Extreme';
-        default:
-        return 'Uncategorized';
-        }
-    }
-    -> also add some emoji accordingly
+How It Works ?
+   On load, the app asks for location access.
+   If allowed → shows weather for your current location.
+   If denied → defaults to a fallback city, and you can search manually.
+   Searching for a city updates the display instantly.
+   Recently searched cities appear in a dropdown.
+   Clicking any saved city refreshes the data.
+   The temperature toggle button lets you view readings in °C or °F.
+   A 5-day forecast section presents upcoming conditions with relevant icons.
 
-4. if the user chooses to give permission for the location access we just do the same with the location we get.
+Future Improvements :
+   -> Add theme transitions (sunrise/sunset animation).
+   -> Integrate air quality index data.
+   -> Add voice-based city search for accessibility.
+   -> Improve offline fallback support.
 
-
-5. additionally: 
- -> we have a toggle button to get the weather conditions to fahrenheit.
- -> we will also provide forcast weather for the 5 days in future in same format 
- -> 
+Developer : Ritick Kumar
+“skySnap — snaps the weather conditions to present to you.” Built with ❤️ and logic.

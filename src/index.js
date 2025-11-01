@@ -30,7 +30,6 @@ let forecastContainer = document.querySelector(".forecastContainer")
 if (!forecastContainer) {
     forecastContainer = document.createElement("section")
     // forecastContainer.className = "forecastContainer max-w-6xl mx-auto grid grid-row-5 sm:grid-cols-5 gap-4 mt-6 px-4 py-6 border-2 rounded-2xl shadow-xl shadow-slate-600"
-    // Insert after the grid inside detailsArea if possible, otherwise append
     const main = document.querySelector("main");
     const detailsArea = document.querySelector(".detailsArea");
     // Insert forecastContainer inside main, right after detailsArea
@@ -116,7 +115,7 @@ function ensureRecentDropdown() {
     recentDropdown = document.createElement("div")
     recentDropdown.className = "recentDropdown relative inline-block ml-3"
     recentDropdown.innerHTML = `
-    <button class="recentToggle bg-slate-800 px-4 py-2 rounded-md">Recent ▼</button>
+    <button class="recentToggle bg-slate-800 px-4 py-2 rounded-md text-sm sm:text-base md:px-4 md:py-2 hidden sm:block">Recent ▼</button>
     <div class="recentList absolute right-0 mt-2 w-44 bg-slate-900 text-slate-50 rounded-md p-2 shadow-lg hidden"></div>`
 
     // append to nav if exists, otherwise to header
@@ -238,6 +237,7 @@ function getBackgroundImageForForecast(condition, icon = "") {
   if (c.includes("clear")) return isNight ? "/src/resources/night-clear.jpg" : "/src/resources/clear.jpg";
   return "/src/resources/default.jpg";
 }
+
 
 
 // fecth function -----------------------------------------------------------------------------------
@@ -507,8 +507,8 @@ function handleGeoLocation() {
                 displayForecast(forecast)
                 saveRecentSearch(current.name || `${latitude.toFixed(2)},${longitude.toFixed(2)}`)
             } catch (error) {
-                console.error(err)
-                showError("unable to fetch weather for current location" + (err.message || ""))
+                console.error(error)
+                showError("unable to fetch weather for current location" + (error.message || ""))
             }
         },
         (err) => {

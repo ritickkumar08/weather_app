@@ -15,22 +15,20 @@
     <!-- ============================desinging the navbar===================================== -->
     <header class="top-0 bg-transparent backdrop-blur-none">
         <div class="navBar max-w-6xl mx-auto py-4">
-            <div
-                class="flex flex-col md:flex-row justify-between items-center rounded-full shadow-2xl shadow-slate-600 bg-black px-4 md:h-24">
-                <div class="logo flex items-center justify-center my-3 md:my-0">
-                    <i class="fa-solid fa-cloud-bolt p-3 text-3xl md:text-4xl"></i>
+            <div class="flex flex-col md:flex-row sm:justify-between sm:items-center items-start rounded-3xl sm:rounded-full shadow-2xl shadow-slate-600 bg-black  px-1 sm:px-4 md:h-24 border-0">
+                <div class="logo flex items-center justify-center my-3 md:my-0 ">
+                    <i class="fa-solid fa-cloud-bolt sm:p-3 pl-3 text-3xl md:text-4xl"></i>
                     <h1 class="font-extrabold text-3xl md:text-4xl inline ml-2"><b class="text-blue-400">sky</b>Snap
                     </h1>
                 </div>
                 <nav class="w-full md:w-auto">
-                    <ul
-                        class="flex flex-col md:flex-row gap-4 md:gap-6 text-sm md:text-md font-semibold justify-center items-center pb-3 md:pb-0">
-                        <li class="w-3/4 md:w-auto"><input
-                                class="inputCity border w-full md:w-56 h-10 rounded-md px-2 focus:outline-2 focus:outline-slate-950"
-                                type="text" placeholder=" E.G.- GUMLA" name="cityNmae"></li>
-                        <li
-                            class="userLocation border p-2 rounded-4xl shadow-sm shadow-slate-500 hover:shadow-md hover:shadow-slate-400 cursor-pointer text-center text-sm md:text-base">
-                            <i class="fa-solid fa-location-dot mr-2"></i>Use Current Location</li>
+                    <ul class="flex md:flex-row gap-4 md:gap-6 text-sm md:text-md font-semibold sm:justify-center items-center justify-around pb-3 md:pb-0">
+                        <li class="w-3/4 md:w-auto">
+                            <input class="inputCity border w-full md:w-56 h-10 rounded-md px-2 focus:outline-2 focus:outline-slate-950" type="text" placeholder=" E.G.- GUMLA" name="cityNmae">
+                        </li>
+                        <li class="userLocation border p-2 rounded-4xl shadow-sm shadow-slate-500 hover:shadow-md hover:shadow-slate-400 cursor-pointer text-center text-sm md:text-base">
+                            <i class="fa-solid fa-location-dot mr-2"></i>Use Current Location
+                        </li>
                     </ul>
                 </nav>
             </div>
@@ -39,49 +37,45 @@
 
     <!-- ======================================main===================================== -->
     <main class="p-2.5 mt-1 grow">
-        <section
-            class="detailsArea border-2 max-w-6xl mx-auto my-[5%] rounded-2xl shadow-xl shadow-slate-600 bg-[url('/src/resources/cloudy.jpg')] bg-center bg-cover">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto my-6 p-4">
+        <section class="detailsArea border-2 border-mint-500 max-w-6xl mx-auto my-[5%] rounded-2xl shadow-xl shadow-slate-600 bg-[url('/src/resources/default.jpg')] bg-center bg-cover">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-4xl mx-auto my-6 p-4">
+
                 <!-- ---temperature block----- -->
-                <div
-                    class="tempratureMain col-span-1 sm:col-span-2 lg:col-span-4 rounded-2xl shadow-md shadow-black flex flex-col sm:flex-row border-0 justify-between items-center  bg-black/50 p-4">
+                <div class="tempratureMain col-span-1 sm:col-span-2 lg:col-span-4 rounded-2xl shadow-xl shadow-black flex flex-col sm:flex-row border-0 justify-between items-center  bg-black/50 p-4">
                     <div class="flex items-center gap-4 sm:gap-6 mb-4 sm:mb-0">
                         <i class="fa-solid fa-cloud-rain text-5xl sm:text-6xl"></i>
-                        <h2 class="font-extrabold text-4xl sm:text-6xl">21.2 °C
-                            <p class="font-light text-4xl">clear</p>
+                        <h2 class="font-extrabold text-4xl sm:text-6xl"> --°C
+                            <p class="font-light text-4xl">—</p>
                         </h2>
                     </div>
                     <div>
-                        <button
-                            class="relative bg-gray-500 rounded-3xl w-16 sm:w-20 h-8 sm:h-10 hover:ring-2 hover:ring-green-400 text-xl sm:text-2xl"
-                            aria-label="toggle button">°C</button>
+                        <button class="relative bg-gray-500 rounded-3xl w-16 sm:w-20 h-8 sm:h-10 hover:ring-2 hover:ring-green-400 text-xl sm:text-2xl" aria-label="toggle button">°C</button>
                     </div>
                 </div>
 
                 <!-- wind -->
-                <div class="wind rounded-xl pb-24 shadow-md shadow-black bg-black/40 p-3 text-sm sm:text-base">
+                <div class="wind rounded-xl pb-24 shadow-xl shadow-black bg-black/50 p-3 text-sm sm:text-base">
                     <h3 class="text-lg sm:text-xl mb-2">💨Wind</h3>
                     <p>wind Speed : </p>
                     <p>Direction :</p>
                 </div>
 
                 <!-- atmosphere -->
-                <div class="atmosphere pb-24 rounded-xl shadow-md shadow-black bg-black/40 p-3 text-sm sm:text-base">
+                <div class="atmosphere pb-24 rounded-xl shadow-xl shadow-black bg-black/50 p-3 text-sm sm:text-base">
                     <h3 class="text-lg sm:text-xl mb-2">☁️🌁Atmosphere</h3>
                     <p>Humidity : </p>
                     <p>Pressure : </p>
                 </div>
 
                 <!-- temperatue details -->
-                <div
-                    class="temperature pb-24 rounded-xl shadow-md shadow-black bg-black/40 p-3 text-sm sm:text-base">
+                <div class="temperature pb-24 rounded-xl shadow-xl shadow-black bg-black/50 p-3 text-sm sm:text-base">
                     <h3 class="text-lg sm:text-xl mb-2">🔥❄️Temperature</h3>
                     <p>Feels Like : </p>
                     <p>Dew Point : </p>
                 </div>
 
                 <!-- Visibility -->
-                <div class="visibility pb-24 rounded-xl shadow-md shadow-black bg-black/40 p-3 text-sm sm:text-base">
+                <div class="visibility pb-24 rounded-xl shadow-xl shadow-black bg-black/50 p-3 text-sm sm:text-base">
                     <h3 class="text-lg sm:text-xl mb-2">🌁🔭Visibility</h3>
                     <p>Visibility : </p>
                 </div>
@@ -93,11 +87,9 @@
         </h2>
 
         <!-- Forecast container (where JS will inject forecast cards) -->
-        <section
-            class="forecastContainer max-w-6xl mx-auto grid grid-row-5 sm:grid-cols-5 gap-4 mt-4 px-4 py-6 border-2 rounded-2xl shadow-xl shadow-slate-600">
+        <section class="forecastContainer max-w-6xl mx-auto grid grid-row-5 sm:grid-cols-5 gap-4 mt-4 px-4 py-6 border-2 rounded-2xl shadow-xl shadow-slate-600">
             <!-- JS will populate forecast cards here -->
         </section>
-
     </main>
 
 

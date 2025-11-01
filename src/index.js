@@ -76,7 +76,7 @@ function ensureErrorPopup() {
     document.body.appendChild(errorPopup)
 }
 
-function showError(message, timeout = 5000) {
+function showError(message, timeout = 3000) {
     ensureErrorPopup()
     errorPopup.innerHTML = `<strong class="block mb-1">Error</strong><div>${message}</div>`
     errorPopup.classList.remove("hidden")
@@ -96,7 +96,7 @@ function ensureExtremeAlert() {
     document.body.appendChild(extremeAlert)
 }
 
-function showExtremeAlert(message, timeout = 6000) {
+function showExtremeAlert(message, timeout = 4000) {
     ensureExtremeAlert()
     extremeAlert.innerHTML = `<strong>Alert</strong><div>${message}</div>`
     extremeAlert.classList.remove("hidden")
@@ -511,8 +511,8 @@ function handleGeoLocation() {
                 showError("unable to fetch weather for current location" + (error.message || ""))
             }
         },
-        (err) => {
-            console.error(err);
+        (error) => {
+            console.error(error);
             showError("Permission denied or unable to get your location")
         },
         { enableHighAccuracy: false, timeout: 8000 }

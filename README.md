@@ -37,6 +37,56 @@ Features :-
    -> Displays a special alert when extreme temperatures occur (like above 40°C).
 
 
+JavaScript Flow :
+
+-> Global setup and selectors
+      DOM elements like input fields, buttons, and display sections are captured.
+      Default background image and temperature unit are initialized.
+
+-> Function: getWeatherByCity(city)
+      Takes city name as input.
+      etches weather data from OpenWeatherMap using the fetch() API.
+      If successful, calls displayWeather(data) to update the UI.
+I     If the request fails (e.g., city not found), triggers showError(message).
+
+-> Function: getWeatherByLocation()
+      Uses the browser’s navigator.geolocation to get latitude and longitude.
+      Sends coordinates to the API to fetch location-based weather data.
+      Updates the UI through displayWeather() similar to manual city search.
+
+-> Function: displayWeather(data)
+      Extracts details such as temperature, humidity, wind, pressure, and visibility.
+      Updates respective DOM elements dynamically.
+      Calls setBackground(condition) to update visuals based on weather type.
+      Also checks temperature — if above 40°C, triggers a custom alert.
+
+-> Function: setBackground(condition)
+      Decides which background image to display based on weather condition (clear, rain, clouds, etc.).
+      Updates the main container background dynamically.
+
+-> Function: classifyWeather(condition)
+      Converts raw API conditions (like “Drizzle” or “Thunderstorm”) into simplified categories (Sunny, Cloudy, Rainy, etc.).
+      Returns a clean label and relevant emoji for display.
+
+-> Function: toggleTemperature()
+      Converts temperature between Celsius and Fahrenheit when the toggle button is clicked.
+      Updates the label accordingly.
+
+-> Function: storeCity(city) and loadRecentCities()
+      Manages recent searches using local/session storage.
+      Updates dropdown dynamically.
+      Clicking a city name re-fetches its weather data.
+
+-> Function: fetchForecast(city)
+      Fetches 5-day forecast data using another API endpoint.
+      Calls displayForecast(forecastData) to render forecast cards with date, temperature, wind, and humidity.
+
+-> Event Listeners
+      Input box: listens for Enter key to search city.
+      “Use Current Location” button: triggers location-based fetch.
+      Temperature toggle: switches units.
+      Dropdown: loads weather data for selected city.
+
 Tech Stack :
    -> Frontend: HTML, Tailwind CSS
    -> Logic: Vanilla JavaScript

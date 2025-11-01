@@ -247,7 +247,7 @@ async function fetchJSON(url) {
         const res = await fetch(url)
         if (!res.ok) {
             const text = await res.text().catch(() => "")
-            throw new Error(`API error: ${res.status} ${res.statusText} ${txt ? "_" + txt : ""}`)
+            throw new Error(`API error: ${res.status} ${res.statusText} ${text ? "_" + text : ""}`)
         }
         return await res.json();
     } catch (error) {
@@ -434,7 +434,7 @@ function displayForecast(forecastData) {
 
         // create card with dynamic background image
         const card = document.createElement("div");
-        card.className = "flex flex-col items-center justify-center p-3 rounded-lg text-white shadow-md shadow-slate-700 hover:scale-105 transition-transform duration-200";
+        card.className = "flex flex-col items-center justify-center p-3 rounded-lg text-white shadow-xl shadow-black hover:scale-105 transition-transform duration-200";
         card.style.backgroundImage = `url('${bgImage}')`;
         card.style.backgroundSize = "cover";
         card.style.backgroundPosition = "center";

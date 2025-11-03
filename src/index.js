@@ -1,10 +1,11 @@
 // index.js
 // Weather Forecast Application (skySnap)
 // Handles API calls, UI updates, and user interactions
-//// https://api.openweathermap.org/data/2.5/weather?q=gumla&appid=7ba69110ea3e8a7bf4ad655cdd25a2de&units=metric
+// https://api.openweathermap.org/data/2.5/weather?q=gumla&appid=7ba69110ea3e8a7bf4ad655cdd25a2de&units=metric
+// API_KEY = "7ba69110ea3e8a7bf4ad655cdd25a2de"
 
 //the generated API key from https://openweathermap.org/api
-const API_KEY = import.meta.env.VITE_API_KEY;;
+const API_KEY = "7ba69110ea3e8a7bf4ad655cdd25a2de";
 
 //selecting all the need nodes that would be manipulated later -----------------------------------------------------------------------------------
 const inputCity = document.querySelector('.inputCity') //points at the input node

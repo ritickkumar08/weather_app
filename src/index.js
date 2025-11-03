@@ -4,7 +4,7 @@
 //// https://api.openweathermap.org/data/2.5/weather?q=gumla&appid=7ba69110ea3e8a7bf4ad655cdd25a2de&units=metric
 
 //the generated API key from https://openweathermap.org/api
-const API_KEY = "7ba69110ea3e8a7bf4ad655cdd25a2de";
+const API_KEY = import.meta.env.VITE_API_KEY;;
 
 //selecting all the need nodes that would be manipulated later -----------------------------------------------------------------------------------
 const inputCity = document.querySelector('.inputCity') //points at the input node
